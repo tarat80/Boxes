@@ -14,10 +14,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController,
+               onNavigate: (Screen)->Unit ) {
     NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
         composable( route = Screen.LoginScreen.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController, onNavigate )
         }
         composable( route = Screen.BoxesScreen.route +"/{name}",
             arguments = listOf(
@@ -34,7 +35,8 @@ fun Navigation(navController: NavHostController) {
 }
 
 @Composable
-fun LoginScreen( navController: NavController ) {
+fun LoginScreen( navController: NavController,
+                 onNavigate: (Screen)->Unit) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -42,7 +44,8 @@ fun LoginScreen( navController: NavController ) {
             .padding(50.dp)
     ) {
         Button(onClick = {
-                navController.navigate(Screen.BoxesScreen.withArgs("atAta"))
+            onNavigate(Screen.BoxesScreen)
+            navController.navigate(Screen.BoxesScreen.withArgs("atAta"))
         }
         ) {
         }
