@@ -20,23 +20,42 @@ fun Navigation(navController: NavHostController,
         composable( route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController, onNavigate )
         }
-        composable( route = Screen.BoxesScreen.route +"/{name}",
+
+        composable( route = Screen.BoxesScreen.route +"/{mail}",
             arguments = listOf(
-                navArgument("name") {
+                navArgument("mail") {
                     type = NavType.StringType
-                    defaultValue = "Philipp"
-                    nullable = true
+                    defaultValue = "mail"
+                    nullable = false
                 }
             )
-        ) { entry ->
-            BoxesScreen(name = entry.arguments?.getString("name"))
-        }
+        ) { entry ->   BoxesScreen(mail = entry.arguments?.getString("mail")) }
+
+        composable( route = Screen.OneBoxScreen.route,
+            ) { OneBoxScreen()  }
+
+        composable( route = Screen.SettingsScreen.route +"/{mail}",
+            arguments = listOf(
+                navArgument("mail") {
+                    type = NavType.StringType
+                    defaultValue = "mail"
+                    nullable = false
+                }
+            )
+        ) {  entry -> SettingsScreen(mail = entry.arguments?.getString("mail"))  }
+
+        composable( route = Screen.AccountDetailsScreen.route,
+        ) {  AccountDetailsScreen()  }
     }
 }
 
+
+
+
 @Composable
 fun LoginScreen( navController: NavController,
-                 onNavigate: (Screen)->Unit) {
+                 onNavigate: (Screen)->Unit
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -54,10 +73,10 @@ fun LoginScreen( navController: NavController,
 
 @Composable
 fun BoxesScreen(
-    name :String?
+    mail :String?
 ) {
-    if (name != null) {
-        Text(text = name)    }
+    if (mail != null) {
+        Text(text = mail)    }
 
 }
 
@@ -70,8 +89,10 @@ fun OneBoxScreen(
 
 @Composable
 fun SettingsScreen(
-
+    mail :String?
 ) {
+    if (mail != null) {
+        Text(text = mail)    }
 }
 
 @Composable
