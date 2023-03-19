@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -17,6 +18,7 @@ import androidx.navigation.navArgument
 fun Navigation(navController: NavHostController,
                onNavigate: (Screen)->Unit ) {
     NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+
         composable( route = Screen.LoginScreen.route) {
             LoginScreen(navController = navController, onNavigate )
         }
@@ -75,8 +77,22 @@ fun LoginScreen( navController: NavController,
 fun BoxesScreen(
     mail :String?
 ) {
-    if (mail != null) {
-        Text(text = mail)    }
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row() {
+
+        }
+        Row() {
+
+        }
+        Row() {
+
+        }
+    }
+
+
 
 }
 

@@ -23,11 +23,12 @@ fun ItemBox(
         modifier = modifier
             .aspectRatio(1f)
             .border(
-                width = 5.dp, SolidColor(Color.Green),
-                RoundedCornerShape(15.dp)
+                width = 15.dp, SolidColor(Color.Green),
+                RoundedCornerShape(33.dp)),
+                        backgroundColor=Color.Green.copy(0.1f)
             )
-            .background(Color.Green)
-    ) {
+
+     {
 
     }
 }
