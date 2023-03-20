@@ -75,6 +75,14 @@ dependencies {
     def room_version = "2.5.0"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // Compose dependencies
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0"
 }
 
 kapt {

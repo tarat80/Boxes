@@ -18,13 +18,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val vm : MainViewModel = hiltViewModel()
+            val mainViewModel : MainViewModel = hiltViewModel()
             BoxesTheme {
                 val navController = rememberNavController()
-            Scaffold(topBar = { TopBar(vm.state.route) }
+            Scaffold(topBar = { TopBar(mainViewModel.state.route) }
             ) {
                 Box(Modifier.padding(it)) {
-                    Navigation(navController, vm::onNavigate)
+                    Navigation(navController, mainViewModel::onNavigate)
                 }
             }
         }

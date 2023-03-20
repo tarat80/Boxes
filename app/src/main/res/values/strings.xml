@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Boxes</string>
+    <string name="Register">Register</string>
+    <string name="Login">Login</string>
 </resources>

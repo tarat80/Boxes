@@ -1,26 +1,28 @@
 package com.example.boxes
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.boxes.presentation.loginscreen.LoginScreen
+import com.example.boxes.presentation.loginscreen.LoginViewModel
 
 @Composable
 fun Navigation(navController: NavHostController,
-               onNavigate: (Screen)->Unit ) {
-    NavHost(navController = navController, startDestination = Screen.LoginScreen.route) {
+               onNavigate: (Screen)->Unit,
+               loginViewModel: LoginViewModel = hiltViewModel()
+) {
+    NavHost(navController = navController,
+        startDestination = Screen.LoginScreen.route) {
 
         composable( route = Screen.LoginScreen.route) {
-            LoginScreen(navController = navController, onNavigate )
+            LoginScreen(navController = navController,loginViewModel, onNavigate )
         }
 
         composable( route = Screen.BoxesScreen.route +"/{mail}",
@@ -51,27 +53,6 @@ fun Navigation(navController: NavHostController,
     }
 }
 
-
-
-
-@Composable
-fun LoginScreen( navController: NavController,
-                 onNavigate: (Screen)->Unit
-) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(50.dp)
-    ) {
-        Button(onClick = {
-            onNavigate(Screen.BoxesScreen)
-            navController.navigate(Screen.BoxesScreen.withArgs("atAta"))
-        }
-        ) {
-        }
-    }
-}
 
 @Composable
 fun BoxesScreen(
