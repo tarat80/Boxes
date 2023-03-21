@@ -1,4 +1,4 @@
-package com.example.boxes.presentation.loginscreen
+package com.example.boxes.loginfeature.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.boxes.R
-import com.example.boxes.Screen
+import com.example.boxes.presentation.Screen
 
 @Composable
 fun LoginScreen(navController: NavController,
@@ -25,7 +25,7 @@ fun LoginScreen(navController: NavController,
 ) {
     val lState = loginViewModel.state.collectAsStateWithLifecycle()
     Column(
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
@@ -33,16 +33,20 @@ fun LoginScreen(navController: NavController,
     ) {
         OutlinedTextField(
             value =lState.value.mail,
-            onValueChange =loginViewModel::onMailChanged)
+            onValueChange =loginViewModel::onMailChanged,
+            label = {Text(text = "Email")})
         OutlinedTextField(
             value =lState.value.name,
-            onValueChange =loginViewModel::onNameChanged)
+            onValueChange =loginViewModel::onNameChanged,
+            label = {Text(text = "Name")})
         OutlinedTextField(
             value =lState.value.password,
-            onValueChange =loginViewModel::onPasswordChanged)
+            onValueChange =loginViewModel::onPasswordChanged,
+            label = {Text(text = "Password")})
         OutlinedTextField(
             value =lState.value.repeatedPassword,
-            onValueChange =loginViewModel::onRepeatedPasswordChanged)
+            onValueChange =loginViewModel::onRepeatedPasswordChanged,
+            label = {Text(text = "Repeat password")})
 
         Button(onClick =  loginViewModel::onLogin
         ) {

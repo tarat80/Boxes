@@ -1,4 +1,4 @@
-package com.example.boxes.presentation.loginscreen
+package com.example.boxes.loginfeature.presentation
 
 data class LoginState(
     val mail : String ="",

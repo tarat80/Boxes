@@ -1,4 +1,4 @@
-package com.example.boxes
+package com.example.boxes.presentation
 
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar

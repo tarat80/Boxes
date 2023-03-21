@@ -1,4 +1,4 @@
-package com.example.boxes
+package com.example.boxes.presentation
 
 sealed class Screen(val route: String) {
     object LoginScreen : Screen("login_screen")

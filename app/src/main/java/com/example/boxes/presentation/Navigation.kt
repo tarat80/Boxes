@@ -1,28 +1,25 @@
-package com.example.boxes
+package com.example.boxes.presentation
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.boxes.presentation.loginscreen.LoginScreen
-import com.example.boxes.presentation.loginscreen.LoginViewModel
+import com.example.boxes.boxesscreenfeature.presentation.BoxesScreen
+import com.example.boxes.loginfeature.presentation.LoginScreen
 
 @Composable
 fun Navigation(navController: NavHostController,
-               onNavigate: (Screen)->Unit,
-               loginViewModel: LoginViewModel = hiltViewModel()
+               onNavigate: (Screen)->Unit
+
 ) {
     NavHost(navController = navController,
         startDestination = Screen.LoginScreen.route) {
 
         composable( route = Screen.LoginScreen.route) {
-            LoginScreen(navController = navController,loginViewModel, onNavigate )
+            LoginScreen(navController = navController,
+                 onNavigate = onNavigate )
         }
 
         composable( route = Screen.BoxesScreen.route +"/{mail}",
@@ -55,41 +52,10 @@ fun Navigation(navController: NavHostController,
 
 
 @Composable
-fun BoxesScreen(
-    mail :String?
-) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row() {
-
-        }
-        Row() {
-
-        }
-        Row() {
-
-        }
-    }
-
-
-
-}
-
-@Composable
 fun OneBoxScreen(
 
 
 ) {
-}
-
-@Composable
-fun SettingsScreen(
-    mail :String?
-) {
-    if (mail != null) {
-        Text(text = mail)    }
 }
 
 @Composable

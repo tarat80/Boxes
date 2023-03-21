@@ -1,4 +1,4 @@
-package com.example.boxes
+package com.example.boxes.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,7 +12,7 @@ class MainViewModel @Inject constructor(
 ): ViewModel() {
 
     var state by mutableStateOf<Screen>(Screen.LoginScreen)
-
+    private set
     fun onNavigate(screen: Screen){
         state = screen
     }

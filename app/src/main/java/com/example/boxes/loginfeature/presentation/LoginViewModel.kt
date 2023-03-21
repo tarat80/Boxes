@@ -1,7 +1,9 @@
-package com.example.boxes.presentation.loginscreen
+package com.example.boxes.loginfeature.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.boxes.loginfeature.domain.LoginUseCase
+import com.example.boxes.loginfeature.domain.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-  //  private val loginRepository : LoginRepository
+ // private val loginUseCase: LoginUseCase,
+ // private val registerUseCase: RegisterUseCase
 
 ) : ViewModel() {
     private var joBa : Job? =null
