@@ -1,4 +1,4 @@
-package com.example.boxes.presentation
+package com.example.boxes.main.presentation
 
 import androidx.compose.runtime.*
 import androidx.navigation.NavHostController
@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.boxes.boxesscreenfeature.presentation.BoxesScreen
 import com.example.boxes.loginfeature.presentation.LoginScreen
+import com.example.boxes.presentation.SettingsScreen
 
 @Composable
 fun Navigation(navController: NavHostController,

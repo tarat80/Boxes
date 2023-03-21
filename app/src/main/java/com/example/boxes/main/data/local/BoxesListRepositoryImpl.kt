@@ -1,10 +1,9 @@
-package com.example.boxes.data
+package com.example.boxes.main.data.local
 
 import com.example.boxes.boxesscreenfeature.domain.BoxesListRepository
 import com.example.boxes.boxesscreenfeature.presentation.BoxState
-import com.example.boxes.data.local.UsersAndBoxesDatabase
-import com.example.boxes.data.local.entities.BoxesListEntityMapper
-import com.example.boxes.data.local.entities.defaultMake
+import com.example.boxes.main.data.local.entities.BoxesListEntityMapper
+import com.example.boxes.main.data.local.entities.defaultMake
 import javax.inject.Inject
 
 class BoxesListRepositoryImpl @Inject constructor(
@@ -12,13 +11,14 @@ class BoxesListRepositoryImpl @Inject constructor(
     private val boxesListEntityMapper: BoxesListEntityMapper
 ): BoxesListRepository {
     private val dao = usersAndBoxesDatabase.getBoxesDao()
+
     override suspend fun getBoxesByMail(mail: String): BoxState {
 
-        var temp = dao.getBoxesByMail(mail)
-        if (temp != null) return temp.map(boxesListEntityMapper)
+         var temp = dao.getBoxes(mail)
+         if (temp != null) return temp.map(boxesListEntityMapper)
 
-        temp = defaultMake(mail)
-        dao.insert(temp)
-        return temp.map(boxesListEntityMapper)
-    }
+         temp = defaultMake(mail)
+         dao.insert(temp)
+         return temp.map(boxesListEntityMapper)
+     }
 }

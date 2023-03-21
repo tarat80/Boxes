@@ -16,7 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.boxes.R
-import com.example.boxes.presentation.Screen
+import com.example.boxes.main.presentation.Screen
 
 @Composable
 fun LoginScreen(navController: NavController,
@@ -35,10 +35,6 @@ fun LoginScreen(navController: NavController,
             value =lState.value.mail,
             onValueChange =loginViewModel::onMailChanged,
             label = {Text(text = "Email")})
-        OutlinedTextField(
-            value =lState.value.name,
-            onValueChange =loginViewModel::onNameChanged,
-            label = {Text(text = "Name")})
         OutlinedTextField(
             value =lState.value.password,
             onValueChange =loginViewModel::onPasswordChanged,

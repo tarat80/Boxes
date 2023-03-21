@@ -1,4 +1,4 @@
-package com.example.boxes.data.local.entities
+package com.example.boxes.main.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 )
 data class UserEntity(
    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
-   @ColumnInfo(name = "email", collate = ColumnInfo.NOCASE) val mail: String,
+   @ColumnInfo(name = "email", collate = ColumnInfo.NOCASE) val email: String,
    @ColumnInfo(name = "name") val userName: String,
    @ColumnInfo(name = "password") val password: String,
    @ColumnInfo(name = "created_at") val createdAt: Long? = null
@@ -25,5 +25,5 @@ data class UserEntity(
       ): T
    }
 
-   fun <T> map(mapper: Mapper<T>): T = mapper.map(mail, userName, password, createdAt)
+   fun <T> map(mapper: Mapper<T>): T = mapper.map(email, userName, password, createdAt)
 }

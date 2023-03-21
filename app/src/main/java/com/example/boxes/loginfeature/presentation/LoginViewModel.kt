@@ -2,8 +2,6 @@ package com.example.boxes.loginfeature.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.boxes.loginfeature.domain.LoginUseCase
-import com.example.boxes.loginfeature.domain.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,9 +22,6 @@ class LoginViewModel @Inject constructor(
 
     fun onMailChanged(string: String){
         _state.value =_state.value.copy(mail = string)
-    }
-    fun onNameChanged(string :String){
-        _state.value =_state.value.copy(name = string)
     }
     fun onPasswordChanged(string: String){
         _state.value =_state.value.copy(password = string)

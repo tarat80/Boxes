@@ -1,4 +1,4 @@
-package com.example.boxes.data.local
+package com.example.boxes.main.data.local
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter

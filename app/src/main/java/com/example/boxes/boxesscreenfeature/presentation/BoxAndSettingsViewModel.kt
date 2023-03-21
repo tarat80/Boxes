@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class BoxAndSettingsViewModel @Inject constructor() {
 
-    var boxStatle by mutableStateOf(BoxState())
+    var boxStatTe by mutableStateOf(BoxState())
     private set
 }

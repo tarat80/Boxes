@@ -1,4 +1,4 @@
-package com.example.boxes.data.local.entities
+package com.example.boxes.main.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -8,14 +8,12 @@ import com.example.boxes.boxesscreenfeature.domain.model.Box
 import com.example.boxes.boxesscreenfeature.presentation.BoxState
 
 @Entity(
-    tableName = "boxes_lists",
-    indices = [Index("email", unique = true)]
+    tableName = "boxes"
 )
 data class BoxesListEntity(
-    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
-    @ColumnInfo(name = "email", collate = ColumnInfo.NOCASE) val mail: String,
-    val boxes: List<Box>,
-
+    @PrimaryKey
+    @ColumnInfo(name = "email", collate = ColumnInfo.NOCASE) val email: String,
+    val boxes: List<Box>
 ) {
     interface Mapper<T> {
         fun map(
@@ -23,9 +21,7 @@ data class BoxesListEntity(
             boxes: List<Box>
         ): T
     }
-
-    fun <T> map(mapper: Mapper<T>): T = mapper.map(mail, boxes)
-
+    fun <T> map(mapper: Mapper<T>): T = mapper.map(email, boxes)
 }
 
 class BoxesListEntityMapper : BoxesListEntity.Mapper<BoxState> {
@@ -34,8 +30,8 @@ class BoxesListEntityMapper : BoxesListEntity.Mapper<BoxState> {
         boxes: List<Box>
     ): BoxState = BoxState(mail, boxes)
 }
-
 fun defaultMake(mMail: String): BoxesListEntity {
-    return BoxesListEntity(id=0, mail =mMail, listOf(Box(),Box(),Box(),Box(),Box(),Box())
+    return BoxesListEntity(
+        email =mMail, List(6){Box()}
     )
 }

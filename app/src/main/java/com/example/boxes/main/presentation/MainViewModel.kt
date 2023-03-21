@@ -1,4 +1,4 @@
-package com.example.boxes.presentation
+package com.example.boxes.main.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

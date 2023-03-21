@@ -1,4 +1,4 @@
-package com.example.boxes.presentation
+package com.example.boxes.main.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
