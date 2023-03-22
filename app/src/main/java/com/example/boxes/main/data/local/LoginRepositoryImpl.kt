@@ -19,7 +19,7 @@ class LoginRepositoryImpl @Inject constructor(
     }
 }
 
-class UserMapper : User.Mapper<UserEntity> {
+class UserMapper @Inject constructor(): User.Mapper<UserEntity> {
     override fun map(
         mail: String,
         name: String,

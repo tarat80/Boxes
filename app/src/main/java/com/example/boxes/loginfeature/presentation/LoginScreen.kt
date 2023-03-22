@@ -36,6 +36,10 @@ fun LoginScreen(navController: NavController,
             onValueChange =loginViewModel::onMailChanged,
             label = {Text(text = "Email")})
         OutlinedTextField(
+            value =lState.value.name,
+            onValueChange =loginViewModel::onNameChanged,
+            label = {Text(text = "Name")})
+        OutlinedTextField(
             value =lState.value.password,
             onValueChange =loginViewModel::onPasswordChanged,
             label = {Text(text = "Password")})

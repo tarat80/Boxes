@@ -12,7 +12,7 @@ class Converters(
     private val jsonParser: JsonParser
 ) {
     @TypeConverter
-    fun fromMeaningsJson(json: String): List<Box> {
+    fun fromJson(json: String): List<Box> {
         return jsonParser.fromJson<ArrayList<Box>>(
             json,
             object : TypeToken<ArrayList<Box>>(){}.type
@@ -20,9 +20,9 @@ class Converters(
     }
 
     @TypeConverter
-    fun toMeaningsJson(meanings: List<Box>): String {
+    fun toJson(boxes: List<Box>): String {
         return jsonParser.toJson(
-            meanings,
+            boxes,
             object : TypeToken<ArrayList<Box>>(){}.type
         ) ?: "[]"
     }
