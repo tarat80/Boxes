@@ -1,4 +1,4 @@
-package com.example.boxes.loginfeature.presentation
+package com.example.boxes.registerfeature.presentation
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -14,23 +14,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.boxes.main.presentation.Screen
-
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavHostController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     val context = LocalContext.current
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
             when (event) {
-                is LoginViewModel.ValidationEvent.Success -> {
+                is RegisterViewModel.ValidationEvent.Success -> {
                     Toast.makeText(
                         context,
-                        "Login successful",
+                        "Registration successful",
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -46,7 +44,7 @@ fun LoginScreen(
         TextField(
             value = state.email,
             onValueChange = {
-                viewModel.onEvent(LoginEvent.EmailChanged(it))
+                viewModel.onEvent(RegisterEvent.EmailChanged(it))
             },
             isError = state.emailError != null,
             modifier = Modifier.fillMaxWidth(),
@@ -69,7 +67,7 @@ fun LoginScreen(
         TextField(
             value = state.password,
             onValueChange = {
-                viewModel.onEvent(LoginEvent.PasswordChanged(it))
+                viewModel.onEvent(RegisterEvent.PasswordChanged(it))
             },
             isError = state.passwordError != null,
             modifier = Modifier.fillMaxWidth(),
@@ -90,29 +88,56 @@ fun LoginScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
+        TextField(
+            value = state.repeatedPassword,
+            onValueChange = {
+                viewModel.onEvent(RegisterEvent.RepeatedPasswordChanged(it))
+            },
+            isError = state.repeatedPasswordError != null,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = {
+                Text(text = "Repeat password")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            visualTransformation = PasswordVisualTransformation()
+        )
+        if (state.repeatedPasswordError != null) {
+            Text(
+                text = state.repeatedPasswordError,
+                color = MaterialTheme.colors.error,
+                modifier = Modifier.align(Alignment.End)
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Checkbox(
+                checked = state.acceptedTerms,
+                onCheckedChange = {
+                    viewModel.onEvent(RegisterEvent.AcceptTerms(it))
+                }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = "Accept terms")
+        }
+        if (state.termsError != null) {
+            Text(
+                text = state.termsError,
+                color = MaterialTheme.colors.error,
+            )
+        }
+
         Button(
             onClick = {
-                viewModel.onEvent(LoginEvent.Submit)
+                viewModel.onEvent(RegisterEvent.Submit)
             },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(text = "Submit")
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth(),
-            Arrangement.End,
-            Alignment.Bottom
-        ) {
-            Button(
-                onClick = {
-                    navController.navigate(Screen.RegisterScreen.route)
-                }
-            ) {
-                Text(text = "To registration")
-            }
         }
     }
 }
