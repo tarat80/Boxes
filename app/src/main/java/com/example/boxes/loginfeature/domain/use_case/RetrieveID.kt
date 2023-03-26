@@ -10,5 +10,5 @@ class RetrieveID @Inject constructor(
     fun execute(
         email: String,
         password: String
-    ): CheckResult = CheckResult(true,"tenh",10)
+    ): CheckResult = CheckResult(true,"",10)
 }

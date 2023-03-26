@@ -12,15 +12,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.boxes.main.presentation.Screen
 
 @Composable
 fun RegisterScreen(
     navController: NavHostController,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: RegisterViewModel
 ) {
-    val state = viewModel.state
+    val state = viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
@@ -31,6 +32,10 @@ fun RegisterScreen(
                         "Registration successful",
                         Toast.LENGTH_LONG
                     ).show()
+                    val id = state.value.id
+                    navController.navigate(
+                        Screen.BoxesScreen.route + "/${id}"
+                    )
                 }
             }
         }
@@ -42,11 +47,11 @@ fun RegisterScreen(
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = state.email,
+            value = state.value.email,
             onValueChange = {
                 viewModel.onEvent(RegisterEvent.EmailChanged(it))
             },
-            isError = state.emailError != null,
+            isError = state.value.emailError.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Email")
@@ -55,21 +60,21 @@ fun RegisterScreen(
                 keyboardType = KeyboardType.Email
             )
         )
-        if (state.emailError != null) {
-            Text(
-                text = state.emailError,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
+        Text(
+            text = state.value.emailError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            value = state.password,
+            value = state.value.password,
             onValueChange = {
                 viewModel.onEvent(RegisterEvent.PasswordChanged(it))
             },
-            isError = state.passwordError != null,
+            isError = state.value.passwordError.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Password")
@@ -79,21 +84,21 @@ fun RegisterScreen(
             ),
             visualTransformation = PasswordVisualTransformation()
         )
-        if (state.passwordError != null) {
-            Text(
-                text = state.passwordError,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
+        Text(
+            text = state.value.passwordError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            value = state.repeatedPassword,
+            value = state.value.repeatedPassword,
             onValueChange = {
                 viewModel.onEvent(RegisterEvent.RepeatedPasswordChanged(it))
             },
-            isError = state.repeatedPasswordError != null,
+            isError = state.value.repeatedPasswordError.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Repeat password")
@@ -103,20 +108,20 @@ fun RegisterScreen(
             ),
             visualTransformation = PasswordVisualTransformation()
         )
-        if (state.repeatedPasswordError != null) {
-            Text(
-                text = state.repeatedPasswordError,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
+        Text(
+            text = state.value.repeatedPasswordError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
             Checkbox(
-                checked = state.acceptedTerms,
+                checked = state.value.acceptedTerms,
                 onCheckedChange = {
                     viewModel.onEvent(RegisterEvent.AcceptTerms(it))
                 }
@@ -124,12 +129,11 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Accept terms")
         }
-        if (state.termsError != null) {
-            Text(
-                text = state.termsError,
-                color = MaterialTheme.colors.error,
-            )
-        }
+
+        Text(
+            text = state.value.termsError,
+            color = MaterialTheme.colors.error,
+        )
 
         Button(
             onClick = {

@@ -11,6 +11,7 @@ import com.example.boxes.boxesscreenfeature.presentation.BoxesScreen
 import com.example.boxes.loginfeature.presentation.LoginScreen
 import com.example.boxes.loginfeature.presentation.LoginViewModel
 import com.example.boxes.registerfeature.presentation.RegisterScreen
+import com.example.boxes.registerfeature.presentation.RegisterViewModel
 
 
 @Composable
@@ -23,17 +24,19 @@ fun Navigation(
     ) {
 
         composable(route = Screen.LoginScreen.route) {
-            val vm : LoginViewModel = hiltViewModel()
-            LoginScreen(navController = navController, vm)
+            val lvm : LoginViewModel = hiltViewModel()
+            LoginScreen(navController = navController, lvm)
         }
         composable(route = Screen.RegisterScreen.route) {
-            RegisterScreen(navController = navController)
+            val rvm : RegisterViewModel = hiltViewModel()
+            RegisterScreen(navController = navController, rvm)
         }
         composable(route = Screen.BoxesScreen.route + "/{id}",
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.IntType
                     defaultValue = -1
+                    nullable = false
                 }
             )
         ) { entry -> BoxesScreen(

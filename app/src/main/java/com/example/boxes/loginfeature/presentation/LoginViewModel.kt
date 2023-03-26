@@ -18,7 +18,7 @@ class LoginViewModel @Inject constructor(
     private val checkEmail: CheckEmail,
     private val checkPassword: CheckPassword,
     private val retrieveID: RetrieveID
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     val validationEvents = validationEventChannel.receiveAsFlow()
 
     fun onEvent(event: LoginEvent) {
-        when(event) {
+        when (event) {
             is LoginEvent.EmailChanged -> {
                 _state.value = _state.value.copy(email = event.email)
             }
@@ -44,20 +44,17 @@ class LoginViewModel @Inject constructor(
         val emailResult = checkEmail.execute(_state.value.email)
         val passwordResult = checkPassword.execute(_state.value.password)
         val authResult = retrieveID.execute(state.value.email, state.value.password)
+        _state.value = _state.value.copy(
+            emailError = emailResult.errorMessage,
+            passwordError = passwordResult.errorMessage,
+            idError = authResult.errorMessage
+        )
 
-        val hasError = listOf(
-            emailResult,
-            passwordResult,
+        val noError = listOf(
+            emailResult, passwordResult,
             authResult
-        ).any { !it.successful }
-
-        if (hasError)
-            _state.value = _state.value.copy(
-                emailError = emailResult.errorMessage,
-                passwordError = passwordResult.errorMessage,
-                idError = authResult.errorMessage
-            )
-        else {
+        ).any { it.successful }
+        if (noError) {
             _state.value = _state.value.copy(id = authResult.id)
             viewModelScope.launch {
                 validationEventChannel.send(ValidationEvent.Success)

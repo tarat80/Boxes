@@ -2,11 +2,13 @@ package com.example.boxes.registerfeature.presentation
 
 data class RegisterState(
     val email: String = "",
-    val emailError: String? = null,
+    val emailError: String = "",
     val password: String = "",
-    val passwordError: String? = null,
+    val passwordError: String = "",
     val repeatedPassword: String = "",
-    val repeatedPasswordError: String? = null,
+    val repeatedPasswordError: String = "",
     val acceptedTerms: Boolean = false,
-    val termsError: String? = null
+    val termsError: String = "",
+    val id : Int = -1,
+    val idError : String = ""
 )

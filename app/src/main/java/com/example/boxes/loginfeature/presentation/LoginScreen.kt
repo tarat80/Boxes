@@ -24,6 +24,7 @@ fun LoginScreen(
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
     LaunchedEffect(context) {
         viewModel.validationEvents.collect { event ->
             when (event) {
@@ -33,13 +34,15 @@ fun LoginScreen(
                         "Login successful",
                         Toast.LENGTH_LONG
                     ).show()
-                    val x = state.value.id.toString()
-                    navController.navigate(Screen.BoxesScreen.route
-                            + "/${x}")
+                    val id = state.value.id
+                    navController.navigate(
+                        Screen.BoxesScreen.route + "/${id}"
+                    )
                 }
             }
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +54,7 @@ fun LoginScreen(
             onValueChange = {
                 viewModel.onEvent(LoginEvent.EmailChanged(it))
             },
-            isError = state.value.emailError != "",
+            isError = state.value.emailError.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Email")
@@ -60,13 +63,13 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Email
             )
         )
-        if (state.value.emailError != "") {
-            Text(
-                text = state.value.emailError,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
+        Text(
+            text = state.value.emailError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
@@ -74,7 +77,7 @@ fun LoginScreen(
             onValueChange = {
                 viewModel.onEvent(LoginEvent.PasswordChanged(it))
             },
-            isError = state.value.passwordError != "",
+            isError = state.value.passwordError.isNotBlank(),
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Password")
@@ -84,13 +87,13 @@ fun LoginScreen(
             ),
             visualTransformation = PasswordVisualTransformation()
         )
-        if (state.value.passwordError != "") {
-            Text(
-                text = state.value.passwordError,
-                color = MaterialTheme.colors.error,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
+
+        Text(
+            text = state.value.passwordError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
@@ -102,21 +105,17 @@ fun LoginScreen(
             Text(text = "Submit")
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .fillMaxWidth(),
-            Arrangement.End,
-            Alignment.Bottom
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                navController.navigate(Screen.RegisterScreen.route)
+            },
+            modifier = Modifier.align(Alignment.End)
         ) {
-            Button(
-                onClick = {
-                    navController.navigate(Screen.RegisterScreen.route)
-                }
-            ) {
-                Text(text = "To registration")
-            }
+            Text(text = "To registration")
         }
+
     }
 }
 

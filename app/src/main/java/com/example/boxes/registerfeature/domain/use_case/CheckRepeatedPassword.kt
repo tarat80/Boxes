@@ -1,6 +1,5 @@
 package com.example.boxes.registerfeature.domain.use_case
 
-import com.example.boxes.loginfeature.domain.use_case.CheckResult
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
@@ -15,7 +14,8 @@ class CheckRepeatedPassword @Inject constructor() {
             )
         }
         return CheckResult(
-            successful = true
+            successful = true,
+            errorMessage = ""
         )
     }
 }
