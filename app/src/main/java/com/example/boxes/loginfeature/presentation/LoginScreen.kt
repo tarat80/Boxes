@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.boxes.main.presentation.Screen
 
@@ -20,11 +20,11 @@ import com.example.boxes.main.presentation.Screen
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    viewModel: LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel
 ) {
-    val state = viewModel.state
+    val state = viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    LaunchedEffect(key1 = context) {
+    LaunchedEffect(context) {
         viewModel.validationEvents.collect { event ->
             when (event) {
                 is LoginViewModel.ValidationEvent.Success -> {
@@ -33,6 +33,9 @@ fun LoginScreen(
                         "Login successful",
                         Toast.LENGTH_LONG
                     ).show()
+                    val x = state.value.id.toString()
+                    navController.navigate(Screen.BoxesScreen.route
+                            + "/${x}")
                 }
             }
         }
@@ -44,11 +47,11 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = state.email,
+            value = state.value.email,
             onValueChange = {
                 viewModel.onEvent(LoginEvent.EmailChanged(it))
             },
-            isError = state.emailError != null,
+            isError = state.value.emailError != "",
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Email")
@@ -57,9 +60,9 @@ fun LoginScreen(
                 keyboardType = KeyboardType.Email
             )
         )
-        if (state.emailError != null) {
+        if (state.value.emailError != "") {
             Text(
-                text = state.emailError,
+                text = state.value.emailError,
                 color = MaterialTheme.colors.error,
                 modifier = Modifier.align(Alignment.End)
             )
@@ -67,11 +70,11 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            value = state.password,
+            value = state.value.password,
             onValueChange = {
                 viewModel.onEvent(LoginEvent.PasswordChanged(it))
             },
-            isError = state.passwordError != null,
+            isError = state.value.passwordError != "",
             modifier = Modifier.fillMaxWidth(),
             placeholder = {
                 Text(text = "Password")
@@ -81,9 +84,9 @@ fun LoginScreen(
             ),
             visualTransformation = PasswordVisualTransformation()
         )
-        if (state.passwordError != null) {
+        if (state.value.passwordError != "") {
             Text(
-                text = state.passwordError,
+                text = state.value.passwordError,
                 color = MaterialTheme.colors.error,
                 modifier = Modifier.align(Alignment.End)
             )

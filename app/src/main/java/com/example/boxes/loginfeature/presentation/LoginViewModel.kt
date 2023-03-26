@@ -1,14 +1,14 @@
 package com.example.boxes.loginfeature.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.boxes.loginfeature.domain.use_case.CheckEmail
 import com.example.boxes.loginfeature.domain.use_case.CheckPassword
+import com.example.boxes.loginfeature.domain.use_case.RetrieveID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,11 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val checkEmail: CheckEmail,
-    private val checkPassword: CheckPassword
+    private val checkPassword: CheckPassword,
+    private val retrieveID: RetrieveID
 ): ViewModel() {
 
-    var state by mutableStateOf(LoginState())
-    private set
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
@@ -28,10 +29,10 @@ class LoginViewModel @Inject constructor(
     fun onEvent(event: LoginEvent) {
         when(event) {
             is LoginEvent.EmailChanged -> {
-                state = state.copy(email = event.email)
+                _state.value = _state.value.copy(email = event.email)
             }
             is LoginEvent.PasswordChanged -> {
-                state = state.copy(password = event.password)
+                _state.value = _state.value.copy(password = event.password)
             }
             is LoginEvent.Submit -> {
                 submitData()
@@ -40,27 +41,31 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun submitData() {
-        val emailResult = checkEmail.execute(state.email)
-        val passwordResult = checkPassword.execute(state.password)
+        val emailResult = checkEmail.execute(_state.value.email)
+        val passwordResult = checkPassword.execute(_state.value.password)
+        val authResult = retrieveID.execute(state.value.email, state.value.password)
 
         val hasError = listOf(
             emailResult,
-            passwordResult
+            passwordResult,
+            authResult
         ).any { !it.successful }
 
-        if(hasError) {
-            state = state.copy(
+        if (hasError)
+            _state.value = _state.value.copy(
                 emailError = emailResult.errorMessage,
-                passwordError = passwordResult.errorMessage
-           )
-            return
-        }
-        viewModelScope.launch {
-            validationEventChannel.send(ValidationEvent.Success)
+                passwordError = passwordResult.errorMessage,
+                idError = authResult.errorMessage
+            )
+        else {
+            _state.value = _state.value.copy(id = authResult.id)
+            viewModelScope.launch {
+                validationEventChannel.send(ValidationEvent.Success)
+            }
         }
     }
 
     sealed class ValidationEvent {
-        object Success: ValidationEvent()
+        object Success : ValidationEvent()
     }
 }

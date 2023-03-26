@@ -2,7 +2,9 @@ package com.example.boxes.loginfeature.presentation
 
 data class LoginState(
     val email: String = "",
-    val emailError: String? = null,
+    val emailError: String = "",
     val password: String = "",
-    val passwordError: String? = null,
+    val passwordError: String = "",
+    val id : Int = -1,
+    val idError : String = ""
 )
