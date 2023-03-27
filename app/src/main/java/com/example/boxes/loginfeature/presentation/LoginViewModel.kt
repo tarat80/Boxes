@@ -2,14 +2,13 @@ package com.example.boxes.loginfeature.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.boxes.loginfeature.domain.model.Resource
 import com.example.boxes.loginfeature.domain.use_case.CheckEmail
 import com.example.boxes.loginfeature.domain.use_case.CheckPassword
 import com.example.boxes.loginfeature.domain.use_case.RetrieveID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,22 +42,30 @@ class LoginViewModel @Inject constructor(
     private fun submitData() {
         val emailResult = checkEmail.execute(_state.value.email)
         val passwordResult = checkPassword.execute(_state.value.password)
-        val authResult = retrieveID.execute(state.value.email, state.value.password)
         _state.value = _state.value.copy(
             emailError = emailResult.errorMessage,
             passwordError = passwordResult.errorMessage,
-            idError = authResult.errorMessage
+            idError = ""
         )
+        val noError = emailResult.successful && passwordResult.successful
 
-        val noError = listOf(
-            emailResult, passwordResult,
-            authResult
-        ).any { it.successful }
-        if (noError) {
-            _state.value = _state.value.copy(id = authResult.id)
-            viewModelScope.launch {
-                validationEventChannel.send(ValidationEvent.Success)
-            }
+        if (noError) viewModelScope.launch {
+            retrieveID.execute(
+                state.value.email,
+                state.value.password
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _state.value = _state.value.copy(id = result.data)
+                        validationEventChannel.send(ValidationEvent.Success)
+                    }
+                    is Resource.Error -> {
+                        _state.value = _state.value.copy(
+                            idError = result.message
+                        )
+                    }
+                }
+            }.launchIn(this)
         }
     }
 

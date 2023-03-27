@@ -5,6 +5,6 @@ data class LoginState(
     val emailError: String = "",
     val password: String = "",
     val passwordError: String = "",
-    val id : Int = -1,
+    val id : Long = -1,
     val idError : String = ""
 )

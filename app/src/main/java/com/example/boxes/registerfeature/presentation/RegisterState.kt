@@ -9,6 +9,6 @@ data class RegisterState(
     val repeatedPasswordError: String = "",
     val acceptedTerms: Boolean = false,
     val termsError: String = "",
-    val id : Int = -1,
+    val id : Long = -1,
     val idError : String = ""
 )

@@ -2,16 +2,11 @@ package com.example.boxes.registerfeature.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.boxes.loginfeature.domain.use_case.RetrieveID
-import com.example.boxes.registerfeature.domain.use_case.CheckEmail
-import com.example.boxes.registerfeature.domain.use_case.CheckPassword
-import com.example.boxes.registerfeature.domain.use_case.CheckRepeatedPassword
-import com.example.boxes.registerfeature.domain.use_case.CheckTerms
+import com.example.boxes.loginfeature.domain.model.Resource
+import com.example.boxes.registerfeature.domain.use_case.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -65,23 +60,31 @@ class RegisterViewModel @Inject constructor(
             termsError = termsResult.errorMessage
         )
 
-        val noError = listOf(
-            emailResult, passwordResult,
-            repeatedPasswordResult, termsResult
-        ).any { it.successful }
+        val noError = !( listOf(
+            emailResult,
+            passwordResult,
+            repeatedPasswordResult,
+            termsResult
+        ).any { !it.successful } )
 
         if (noError) {
-            val registerResult = retrieveID.execute(state.value.email, state.value.password)
-            _state.value = _state.value.copy(
-                idError = registerResult.errorMessage
-            )
-            if (registerResult.successful) {
-                _state.value = _state.value.copy(
-                    id = registerResult.id
-                )
-                viewModelScope.launch {
-                    validationEventChannel.send(ValidationEvent.Success)
-                }
+            viewModelScope.launch {
+                retrieveID.execute(
+                    state.value.email,
+                    state.value.password
+                ).onEach { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            _state.value = _state.value.copy(id = result.data)
+                            validationEventChannel.send(ValidationEvent.Success)
+                        }
+                        is Resource.Error -> {
+                            _state.value = _state.value.copy(
+                                idError = result.message
+                            )
+                        }
+                    }
+                }.launchIn(this)
             }
         }
     }

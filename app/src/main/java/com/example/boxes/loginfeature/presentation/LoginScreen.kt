@@ -49,6 +49,7 @@ fun LoginScreen(
             .padding(32.dp),
         verticalArrangement = Arrangement.Center
     ) {
+
         TextField(
             value = state.value.email,
             onValueChange = {
@@ -115,6 +116,14 @@ fun LoginScreen(
         ) {
             Text(text = "To registration")
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = state.value.idError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
 
     }
 }
