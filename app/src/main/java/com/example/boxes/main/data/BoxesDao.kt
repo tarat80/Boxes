@@ -15,7 +15,7 @@ interface BoxesDao {
             "FROM boxes " +
             "LEFT JOIN accounts_boxes_settings " +
             "  ON boxes.id = accounts_boxes_settings.box_id AND accounts_boxes_settings.account_id = :accountId")
-    fun getBoxesAndSettings(accountId: Long): Flow<Map<BoxDbEntity, AccountBoxSettingDbEntity?>>
+    suspend fun getBoxesAndSettings(accountId: Long): Map<BoxDbEntity, AccountBoxSettingDbEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setActiveFlagForBox(accountBoxSetting: AccountBoxSettingDbEntity)

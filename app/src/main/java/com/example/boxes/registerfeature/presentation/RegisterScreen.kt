@@ -143,6 +143,11 @@ fun RegisterScreen(
         ) {
             Text(text = "Submit")
         }
+        Text(
+            text = state.value.idError,
+            color = MaterialTheme.colors.error,
+            modifier = Modifier.align(Alignment.End)
+        )
     }
 }
 

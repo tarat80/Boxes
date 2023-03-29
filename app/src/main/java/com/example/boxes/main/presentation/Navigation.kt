@@ -34,14 +34,14 @@ fun Navigation(
         composable(route = Screen.BoxesScreen.route + "/{id}",
             arguments = listOf(
                 navArgument("id") {
-                    type = NavType.IntType
+                    type = NavType.LongType
                     defaultValue = -1
                     nullable = false
                 }
             )
         ) { entry -> BoxesScreen(
             navController = navController,
-            id = entry.arguments?.getInt("id")) }
+            id = entry.arguments?.getLong("id")) }
 /*
            composable( route = Screen.OneBoxScreen.route,
                ) { OneBoxScreen()  }

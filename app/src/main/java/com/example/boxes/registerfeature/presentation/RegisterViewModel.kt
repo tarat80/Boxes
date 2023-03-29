@@ -60,12 +60,11 @@ class RegisterViewModel @Inject constructor(
             termsError = termsResult.errorMessage
         )
 
-        val noError = !( listOf(
-            emailResult,
-            passwordResult,
-            repeatedPasswordResult,
-            termsResult
-        ).any { !it.successful } )
+        val noError = emailResult.successful &&
+                repeatedPasswordResult.successful &&
+                passwordResult.successful &&
+                termsResult.successful
+
 
         if (noError) {
             viewModelScope.launch {
